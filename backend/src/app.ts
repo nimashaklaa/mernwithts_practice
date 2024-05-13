@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import notesRoutes from "./routes/notes";
 // import userRoutes from "./routes/users";
-// import morgan from "morgan";
+import morgan from "morgan";
 // import createHttpError, { isHttpError } from "http-errors";
 // import session from "express-session";
 import env from "./util/validateEnv";
@@ -11,8 +11,9 @@ import env from "./util/validateEnv";
 // import NoteModel from "./model/notes"
 const app = express();
 
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 
+// This basically set up express so that it accepts JSON bodies
 app.use(express.json());
 
 // app.use(session({
@@ -30,6 +31,9 @@ app.use(express.json());
 //
 // app.use("/api/users", userRoutes);
 // app.use("/api/notes", requiresAuth, notesRoutes);
+
+// we want to forward this endpoint to notedRoutes; this is a middle ware that catches any request
+// that goes to this endpoint which then checks the notes routes endpoints we have set up ,
 app.use("/api/notes", notesRoutes);
 app.use((req, res, next) => {
     // next(createHttpError(404, "Endpoint not found"));
